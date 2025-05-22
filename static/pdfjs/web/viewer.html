@@ -56,7 +56,43 @@ See https://github.com/adobe-type-tools/cmap-resources
     alert('Right-click is disabled.');
   }, true);
 </script>
-  
+
+  <style>
+  #print,
+  #download,
+  #secondaryOpenFile,
+  #viewBookmark,
+  #editorHighlight,
+  #editorFreeText,
+  #editorInk,
+  #editorStamp,
+  #editorSignature {
+    display: none !important;
+  }
+</style>
+
+ <script>
+    document.addEventListener('keydown', function(e) {
+      const blockedCtrl = ['p', 's', 'd'];
+      const blockedAlt = ['f', 'p', 's'];
+
+      if ((e.ctrlKey || e.metaKey) && blockedCtrl.includes(e.key.toLowerCase())) {
+        e.preventDefault();
+        alert("This action is disabled.");
+      }
+
+      if (e.altKey && blockedAlt.includes(e.key.toLowerCase())) {
+        e.preventDefault();
+        alert("Alt menu options are disabled.");
+      }
+
+      if (e.key === 'PrintScreen') {
+        navigator.clipboard.writeText('');
+        alert('Screenshotting is restricted.');
+      }
+    });
+  </script>
+
 </head>
 
   <body tabindex="0" oncontextmenu="return false;">
