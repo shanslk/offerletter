@@ -34,9 +34,68 @@ See https://github.com/adobe-type-tools/cmap-resources
     <link rel="stylesheet" href="viewer.css">
 
   <script src="viewer.mjs" type="module"></script>
-  </head>
+<script>
+  // Universal shortcut blocker
+  window.addEventListener('keydown', function(e) {
+    const blocked = ['p', 's', 'u'];
+    if ((e.ctrlKey || e.metaKey) && blocked.includes(e.key.toLowerCase())) {
+      e.stopImmediatePropagation(); // ⛔ stop other listeners
+      e.preventDefault();
+      alert('Keyboard shortcuts are disabled.');
+    }
 
-  <body tabindex="0">
+    if (e.key === 'PrintScreen') {
+      navigator.clipboard.writeText('');
+      alert('Screenshots are restricted.');
+    }
+  }, true); // 👈 use capture phase to preempt PDF.js
+
+  // Disable right-click
+  window.addEventListener('contextmenu', function(e) {
+    e.preventDefault();
+    alert('Right-click is disabled.');
+  }, true);
+</script>
+
+  <style>
+  #print,
+  #download,
+  #secondaryOpenFile,
+  #viewBookmark,
+  #editorHighlight,
+  #editorFreeText,
+  #editorInk,
+  #editorStamp,
+  #editorSignature {
+    display: none !important;
+  }
+</style>
+
+ <script>
+    document.addEventListener('keydown', function(e) {
+      const blockedCtrl = ['p', 's', 'd'];
+      const blockedAlt = ['f', 'p', 's'];
+
+      if ((e.ctrlKey || e.metaKey) && blockedCtrl.includes(e.key.toLowerCase())) {
+        e.preventDefault();
+        alert("This action is disabled.");
+      }
+
+      if (e.altKey && blockedAlt.includes(e.key.toLowerCase())) {
+        e.preventDefault();
+        alert("Alt menu options are disabled.");
+      }
+
+      if (e.key === 'PrintScreen') {
+        navigator.clipboard.writeText('');
+        alert('Screenshotting is restricted.');
+      }
+    });
+  </script>
+
+</head>
+
+  <body tabindex="0" oncontextmenu="return false;">
     <div id="outerContainer">
 
       <div id="sidebarContainer">
@@ -732,5 +791,36 @@ See https://github.com/adobe-type-tools/cmap-resources
 
     </div> <!-- outerContainer -->
     <div id="printContainer"></div>
+
+<div id="dynamic-watermark">Confidential – {{ DO NOT COPY }}</div>
+
+<style>
+  #dynamic-watermark {
+    position: fixed;
+    top: 40%;
+    left: 20%;
+    width: 60%;
+    font-size: 36px;
+    font-weight: bold;
+    color: rgba(0, 0, 0, 0.05);
+    text-align: center;
+    transform: rotate(-30deg);
+    z-index: 9999;
+    pointer-events: none;
+    user-select: none;
+    white-space: nowrap;
+  }
+</style>
+
+
+<script>
+  window.addEventListener('keyup', function(e) {
+    if (e.key === 'PrintScreen') {
+      navigator.clipboard.writeText('Screenshots are disabled on this page.');
+      alert("Screenshotting is blocked. Clipboard has been cleared.");
+    }
+  });
+</script>
+
   </body>
 </html>
