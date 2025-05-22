@@ -57,19 +57,22 @@ See https://github.com/adobe-type-tools/cmap-resources
   }, true);
 </script>
 
-  <style>
-  #print,
-  #download,
-  #secondaryOpenFile,
-  #viewBookmark,
-  #editorHighlight,
-  #editorFreeText,
-  #editorInk,
-  #editorStamp,
-  #editorSignature {
+ <style>
+  /* Target toolbar buttons using aria-labels or data-l10n-id */
+  button[aria-label="Print"],
+  button[data-l10n-id="print"],
+  button[aria-label="Download"],
+  button[data-l10n-id="download"],
+  button[data-l10n-id="open-file"],
+  button[data-l10n-id="editor-free-text-button"],
+  button[data-l10n-id="editor-ink-button"],
+  button[data-l10n-id="editor-stamp-button"],
+  button[data-l10n-id="editor-highlight-button"],
+  button[data-l10n-id="editor-signature-button"] {
     display: none !important;
   }
 </style>
+
 
  <script>
     document.addEventListener('keydown', function(e) {
