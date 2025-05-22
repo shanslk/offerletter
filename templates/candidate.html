@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Offer Letter | Secure Viewer</title>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+            font-family: sans-serif;
+        }
+        #viewerContainer {
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+        }
+        #watermark {
+            position: fixed;
+            bottom: 10px;
+            right: 10px;
+            opacity: 0.2;
+            font-size: 14px;
+            z-index: 1000;
+            pointer-events: none;
+        }
+    </style>
+<style>
+    #topbar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 40px;
+        background: #1e1e1e;
+        color: white;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0 15px;
+        z-index: 9999;
+        font-size: 14px;
+    }
+
+    #viewerContainer {
+        margin-top: 40px; /* Push below the topbar */
+    }
+
+    a {
+        color: #ffd;
+        text-decoration: none;
+    }
+
+    a:hover {
+        text-decoration: underline;
+    }
+</style>
+
+</head>
+<body oncontextmenu="return false;" onkeydown="return preventKeys(event)">
+
+<div id="topbar">
+    <span>Welcome, {{ username }}</span>
+    <a href="{{ url_for('logout') }}">Logout</a>
+</div>
+
+
+<div id="viewerContainer">
+    <div id="watermark">{{ username }} | {{ offer_file }}</div>
+<iframe id="pdf-frame"
+        src="{{ url_for('static', filename='pdfjs/web/viewer.html') }}?file={{ url_for('serve_offer_pdf') }}"
+        width="100%" height="100%" style="border:none;"></iframe>
+</div>
+
+<script>
+function preventKeys(e) {
+    const block = ['p', 's', 'c', 'u']; // print, save, copy, view source
+    if ((e.ctrlKey || e.metaKey) && block.includes(e.key.toLowerCase())) {
+        e.preventDefault();
+        return false;
+    }
+    if (e.key === 'PrintScreen') {
+        alert("Screenshotting is not allowed.");
+        return false;
+    }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Admin Dashboard | Offer Letter Portal</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f1f3f5;
+            padding: 40px;
+        }
+        .container {
+            max-width: 800px;
+            margin: auto;
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0px 0px 10px rgba(0,0,0,0.1);
+        }
+        h2 {
+            color: #444;
+        }
+        table {
+            width: 100%;
+            margin-top: 20px;
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+            text-align: left;
+        }
+        form {
+            margin-top: 30px;
+        }
+        input[type="text"], input[type="file"], select {
+            padding: 8px;
+            margin: 5px 0;
+            width: 100%;
+        }
+        button {
+            margin-top: 10px;
+            padding: 10px 15px;
+            background-color: #0078D7;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+        a.logout {
+            float: right;
+            font-size: 14px;
+            text-decoration: none;
+            color: red;
+        }
+    </style>
+<style>
+  .flashes { list-style: none; padding: 0; margin-bottom: 15px; }
+  .flashes li.success { background-color: #d4edda; color: #155724; padding: 10px; border-left: 4px solid #28a745; margin-bottom: 5px; }
+  .flashes li.danger { background-color: #f8d7da; color: #721c24; padding: 10px; border-left: 4px solid #dc3545; margin-bottom: 5px; }
+</style>
+
+</head>
+<body>
+{% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+    <ul class="flashes">
+      {% for category, message in messages %}
+        <li class="{{ category }}">{{ message }}</li>
+      {% endfor %}
+    </ul>
+  {% endif %}
+{% endwith %}
+
+    <div class="container">
+        <a href="{{ url_for('logout') }}" class="logout">Logout</a>
+        <h2>Admin Dashboard</h2>
+
+        <h3>Existing Candidates</h3>
+        <table>
+            <tr>
+                <th>ID</th>
+                <th>Username</th>
+                <th>Offer File</th>
+                <th>Action</th>
+            </tr>
+            {% for user in users %}
+            <tr>
+                <td>{{ user.id }}</td>
+                <td>{{ user.username }}</td>
+                <td>{{ user.offer_filename or 'Not Assigned' }}</td>
+<td>
+    <form action="{{ url_for('upload_offer_letter') }}" method="post" enctype="multipart/form-data">
+      <input type="hidden" name="user_id" value="{{ user.id }}">
+      <input type="file" name="offer_pdf" accept="application/pdf" required>
+      <button type="submit">Upload</button>
+    </form>
+</td>
+                <td>
+                    <form method="post" action="{{ url_for('delete_user') }}">
+                        <input type="hidden" name="user_id" value="{{ user.id }}">
+                        <button type="submit">Delete</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+
+        <h3>Add New Candidate</h3>
+        <form method="post" action="{{ url_for('add_user') }}">
+            <input type="text" name="username" placeholder="Username" required>
+            <input type="text" name="password" placeholder="Password" required>
+            <input type="text" name="offer_filename" placeholder="Offer File Name (e.g., offer_john.pdf)" required>
+            <button type="submit">Add Candidate</button>
+        </form>
+    </div>
+</body>
+</html>
