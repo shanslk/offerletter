@@ -6,6 +6,7 @@ from azure.storage.blob import generate_blob_sas, BlobSasPermissions, BlobServic
 from azure.storage.blob import BlobServiceClient
 import requests
 from urllib.parse import quote
+import os
 
 app = Flask(__name__)
 app.secret_key = 'your_secret_key_here'  # Replace with a strong secret key
